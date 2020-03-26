@@ -3,17 +3,25 @@
 
 ## Deploy AKS cluster
 
-## Connect to the cluster
-
 ```bash
 # Login into Azure Cloud
 az login
 # Check if correct subscription is set
 az account show
+# Create a resource group for AKS cluster
+az group create -g aks03-rg -l westeurope
+# Createa an AKS cluster
+az aks create -g aks03-rg -n aks03 --node-count 1 --no-ssh
+```
+
+## Connect to the cluster
+
+```bash
 # Get kubernetes credentials (login into kubernetes cluster)
-az aks get-credentials --overwrite-existing --resource-group aks02-rg  --name aks02 --admin
+az aks get-credentials --overwrite-existing --resource-group aks03-rg  --name aks03 --admin
 # Check if we are connected
 kubectl get ns
+kubectl get nodes
 ```
 
 ## Demo preparation
@@ -28,10 +36,18 @@ kubectl run my-nginx --image=nginx --replicas=2 --port=80
 
 ## Go and enable AKS policy plugin and deploy them
 
+### Ensure only allowed container images in AKS
+
+Parameters: `^busybox$`
+
+### Enforce labels on pods in AKS
+
+Parameters: `env`
+
 ## Testing policy: Ensure only allowed container images in AKS
 
 ```bash
-service/hello-kubernetes   LoadBalancer   10.0.201.153   <pending>     80:31892/TCP   15s
+kubectl apply -f hello-kubernetes.yaml -n default
 ```
 
 ## Testing policy: Enforce labels on pods in AKS
