@@ -19,8 +19,11 @@ kubectl get ns
 ## Demo preparation
 
 ```bash
-# Deploy endless running container with restricted image
+# Deploy endless running container with busybox without labels
 kubectl apply -f initial-pods.yaml -n default
+
+# Deploy nginx (image will be restricted)
+kubectl run my-nginx --image=nginx --replicas=2 --port=80
 ```
 
 ## Go and enable AKS policy plugin and deploy them
@@ -28,7 +31,7 @@ kubectl apply -f initial-pods.yaml -n default
 ## Testing policy: Ensure only allowed container images in AKS
 
 ```bash
-kubectl run my-nginx --image=nginx --replicas=2 --port=80
+service/hello-kubernetes   LoadBalancer   10.0.201.153   <pending>     80:31892/TCP   15s
 ```
 
 ## Testing policy: Enforce labels on pods in AKS
