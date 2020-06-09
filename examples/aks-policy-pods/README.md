@@ -9,16 +9,16 @@ az login
 # Check if correct subscription is set
 az account show
 # Create a resource group for AKS cluster
-az group create -g aks03-rg -l westeurope
+az group create -g aks04-rg -l westeurope
 # Createa an AKS cluster
-az aks create -g aks03-rg -n aks03 --node-count 1 --no-ssh
+az aks create -g aks04-rg -n aks04 --node-count 1 --no-ssh
 ```
 
 ## Connect to the cluster
 
 ```bash
 # Get kubernetes credentials (login into kubernetes cluster)
-az aks get-credentials --overwrite-existing --resource-group aks03-rg  --name aks03 --admin
+az aks get-credentials --overwrite-existing --resource-group aks04-rg  --name aks04 --admin
 # Check if we are connected
 kubectl get ns
 kubectl get nodes
@@ -65,11 +65,11 @@ kubectl apply -f pod-with-label.yaml -n default
 Check which exactly policies were applied
 
 ```bash
-kubectl -n azure-policy get cm -o yaml
+kubectl get constrainttemplates.templates.gatekeeper.sh 
 ```
 
 Check management container and logs
 
 ```bash
-kubectl -n kube-system get pods -l app=azure-policy
+kubectl -n gatekeeper-system get all
 ```
